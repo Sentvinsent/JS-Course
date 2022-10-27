@@ -4,7 +4,7 @@
 
 function getRes(studScore, totalScore) {
 
-    let percentage = (studScore / totalScore) * 100;
+    const percentage = (studScore / totalScore) * 100;
     let result;
 
     if (percentage < 60) {
@@ -26,6 +26,6 @@ function getRes(studScore, totalScore) {
 
 }
 
-let gradeResult = getRes(8, 10);
+const gradeResult = getRes(8, 10);
 console.log(gradeResult);
 
