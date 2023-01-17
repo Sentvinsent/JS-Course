@@ -1,66 +1,28 @@
-// DOM -Document Object Model
-
-//query and remove 1st paragraph
-// const p = document.querySelector('p');
-// p.remove();
-
-//query and manipulate all paragraphs
-const ps = document.querySelectorAll('p');
-ps.forEach((o) => {
-    //o.remove();
-    //console.log(o.textContent);
-    o.textContent = 'Test'
-})
-
-let notes = [{
-    title: 'Test 1',
-    body: 'test 1 body'
-},
-{
-    title: 'Test 2',
-    body: 'test 2 body'
-}]
-
-//Add new element
-function addElement() {
-    const newP = document.createElement('p');
-    newP.textContent = 'Dynamic p element value added with JS';
-    document.querySelector('body').appendChild(newP);
-}
+let notes = getSavedNotes();
 
 const filters = {
-    searchText: ''
+    searchText: '',
+    sortBy: 'byEdited'
 }
 
-const renderNotes = function (notes, filters) {
-    const filteredNotes = notes.filter(function (note) {
-        return note.title.toLowerCase().includes(filters.searchText.toLowerCase())
+//Add new element
+function addNote() {
+    const id = uuidv4()
+    const timestamp = new Date().getTime();
+    notes.push({
+        id: id,
+        title: '',
+        body: '',
+        created: timestamp,
+        updated: timestamp
     })
-
-    document.getElementById('notes').innerHTML = '';
-
-    filteredNotes.forEach(function (note) {
-        const noteEl = document.createElement('p');
-        noteEl.textContent = note.title;
-        document.getElementById('notes').appendChild(noteEl);
-    })
+    saveNotes(notes);
+    location.assign(`note.html#${id}`);
 }
 
 renderNotes(notes, filters)
 
-document.querySelector('#create-note').addEventListener('click', addElement);
-
-
-// -- Single --
-//p
-//#replace
-//.item
-
-// -- Multiple -- 
-//p#order
-//button.inventory
-//h1#title.application
-//h1.application#title
+document.querySelector('#create-note').addEventListener('click', addNote);
 
 document.querySelector('#search-txt').addEventListener('input', (e) => {
     filters.searchText = e.target.value;
@@ -68,5 +30,16 @@ document.querySelector('#search-txt').addEventListener('input', (e) => {
 })
 
 document.getElementById('filter-by').addEventListener('change', (e) => {
-    console.log(e.target.value)
+    filters.sortBy = e.target.value;
+    renderNotes(notes, filters)
 })
+
+window.addEventListener('storage', function (e) {
+    if (e.key === 'notes') {
+        notes = JSON.parse(e.newValue);
+        renderNotes(notes, filters)
+    }
+})
+
+//Unix Epoch - January 1st 1970 00:00:00
+// timestamp number calculate from it in ms
