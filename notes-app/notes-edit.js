@@ -1,12 +1,12 @@
+'use strict'
+
 const noteId = location.hash.substring(1);
 
 
 let notes = getSavedNotes();
-let note = notes.find(function (note) {
-    return note.id === noteId
-})
+let note = notes.find((note) => note.id === noteId);
 
-if (note === undefined) {
+if (!note) {
     location.assign('index.html')
 }
 
@@ -36,14 +36,12 @@ removeBtn.addEventListener('click', () => {
     location.assign('index.html');
 })
 
-window.addEventListener('storage', function (e) {
+window.addEventListener('storage', (e) => {
     if (e.key === 'notes') {
         notes = JSON.parse(e.newValue);
-        note = notes.find(function (note) {
-            return note.id === noteId
-        })
+        note = notes.find((note) => note.id === noteId);
 
-        if (note === undefined) {
+        if (!note) {
             location.assign('index.html')
         }
         titleEl.value = note.title;

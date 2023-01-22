@@ -1,3 +1,5 @@
+'use strict'
+
 let notes = getSavedNotes();
 
 const filters = {
@@ -6,7 +8,7 @@ const filters = {
 }
 
 //Add new element
-function addNote() {
+const addNote = () => {
     const id = uuidv4()
     const timestamp = new Date().getTime();
     notes.push({
@@ -34,7 +36,7 @@ document.getElementById('filter-by').addEventListener('change', (e) => {
     renderNotes(notes, filters)
 })
 
-window.addEventListener('storage', function (e) {
+window.addEventListener('storage', (e) => {
     if (e.key === 'notes') {
         notes = JSON.parse(e.newValue);
         renderNotes(notes, filters)

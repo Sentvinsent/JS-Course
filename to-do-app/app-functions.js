@@ -1,34 +1,34 @@
+'use strict'
+
 //Check notes in the local storage
 
-function getToDoList() {
+const getToDoList = () => {
     const toDoJSON = localStorage.getItem('toDoList');
-    if (toDoJSON !== null) {
-        return JSON.parse(toDoJSON)
-    } else {
+    try {
+        return toDoJSON ? JSON.parse(toDoJSON) : [];
+    } catch {
         return []
     }
 }
 
 //Save to do list in the local storage
 
-function saveToDoList(list) {
+const saveToDoList = (list) => {
     localStorage.setItem('toDoList', JSON.stringify(list));
 }
 
 //remove task from the list
-function removeTask(id) {
-    const taskIndex = toDo.findIndex(function (task) {
-        return task._id === id
-    })
+const removeTask = (id) => {
+    const taskIndex = toDo.findIndex((task) => task._id === id);
     if (taskIndex > -1) {
         toDo.splice(taskIndex, 1);
     }
 }
 
 //Render the to do list
-function renderTodo(list, filters) {
+const renderTodo = (list, filters) => {
     const todoDiv = document.getElementById('to-do-list');
-    const incompleteTasks = list.filter((task) => { return !task.completed });
+    const incompleteTasks = list.filter((task) => !task.completed);
 
     let filteredList = list.filter((task) => {
         const textMatchFilter = task.task.toLocaleLowerCase().includes(filters.searchText.toLocaleLowerCase());
@@ -47,7 +47,7 @@ function renderTodo(list, filters) {
 
 //Generate the to do list task DOM
 
-function generateTaskDOM(task, index) {
+const generateTaskDOM = (task, index) => {
     //create elemets: div, checkbox, text and button
     const taskDiv = document.createElement('div');
     const checkbox = document.createElement('input');
@@ -68,7 +68,7 @@ function generateTaskDOM(task, index) {
 
     //working with button
     button.textContent = 'x';
-    button.addEventListener('click', function () {
+    button.addEventListener('click', () => {
         removeTask(task._id);
         saveToDoList(toDo);
         renderTodo(toDo, filters);
@@ -83,14 +83,14 @@ function generateTaskDOM(task, index) {
 }
 
 //Generate the to do list summary DOM
-function generateSummaryDOM(list) {
+const generateSummaryDOM = (list) => {
     const summary = document.createElement('p');
     summary.textContent = `Total number of tasks to do is ${list.length}`
     return summary
 }
 
 //Add a task to the to do list
-function addTask(e) {
+const addTask = (e) => {
     e.preventDefault();
     const inpVal = e.target.elements.addTaskInp.value;
     toDo.push({

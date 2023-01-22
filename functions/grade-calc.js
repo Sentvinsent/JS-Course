@@ -3,6 +3,9 @@
 
 
 function getRes(studScore, totalScore) {
+    if (typeof (studScore) !== 'number' || typeof (totalScore) !== 'number') {
+        throw Error('Please provide numbers')
+    }
 
     const percentage = (studScore / totalScore) * 100;
     let result;
@@ -26,6 +29,11 @@ function getRes(studScore, totalScore) {
 
 }
 
-const gradeResult = getRes(8, 10);
-console.log(gradeResult);
+try {
+    const gradeResult = getRes('8', 10);
+    console.log(gradeResult);
+} catch (e) {
+    console.log(e.message)
+}
+
 
