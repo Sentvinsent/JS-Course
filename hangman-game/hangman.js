@@ -33,8 +33,8 @@ class Hangman {
     }
     checkStatus() {
         let hasGuessed = true;
-        if (word1.generatePuzzle.includes('*')) { hasGuessed = false }
-        if (word1.attempts < 1) {
+        if (game.generatePuzzle.includes('*')) { hasGuessed = false }
+        if (game.attempts < 1) {
             this.status = 'failed';
         } else if (hasGuessed) {
             this.status = 'finished';
@@ -43,7 +43,7 @@ class Hangman {
     get displayPuzzle() {
         if (this.status === 'playing') {
             return `The word to guess is: ${this.generatePuzzle}. You have ${this.attempts} attempts left.`;
-        } else if (word1.status === 'finished') {
+        } else if (game.status === 'finished') {
             return `Congratulations! You've guessed the word ${this.word.join('')}.`
         } else {
             return `Oops... You've failed to guess the word ${this.word.join('')}. Please try again.`
