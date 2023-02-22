@@ -1,7 +1,7 @@
 class Hangman {
-    constructor(word, attempts) {
+    constructor(word) {
         this.word = word.toLowerCase().split('');
-        this.attempts = attempts;
+        this.attempts = Math.round(word.length/2);
         this.guessed = [];
         this.status = 'playing';
     }
@@ -41,12 +41,25 @@ class Hangman {
         }
     }
     get displayPuzzle() {
+        let gameData;
         if (this.status === 'playing') {
-            return `The word to guess is: ${this.generatePuzzle}. You have ${this.attempts} attempts left.`;
+            gameData = {
+                gameTxt: this.generatePuzzle,
+                gameResTxt: `You have ${this.attempts} attempts left. Click a letter on the keyboard to make a guess`
+            }
+            return gameData
         } else if (game.status === 'finished') {
-            return `Congratulations! You've guessed the word ${this.word.join('')}.`
+            gameData = {
+                gameTxt: '',
+                gameResTxt: `Congratulations! You've guessed the word: ${this.word.join('')}.`
+            }
+            return gameData
         } else {
-            return `Oops... You've failed to guess the word ${this.word.join('')}. Please try again.`
+            gameData = {
+                gameTxt: this.generatePuzzle,
+                gameResTxt: `Oops... You've failed to guess the word: ${this.word.join('')}. Please try again.`
+            }
+            return gameData
         }
     }
 }

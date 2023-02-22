@@ -37,22 +37,31 @@ const renderTodo = (list, filters) => {
     })
 
     todoDiv.innerHTML = "";
-
-    todoDiv.appendChild(generateSummaryDOM(incompleteTasks));
-
-    filteredList.forEach((task, index) => {
-        todoDiv.appendChild(generateTaskDOM(task, index));
-    })
+    if (filteredList.length > 0) {
+        todoDiv.appendChild(generateSummaryDOM(incompleteTasks));
+        filteredList.forEach((task, index) => {
+            todoDiv.appendChild(generateTaskDOM(task, index));
+        })
+    } else {
+        const emptyMsg = document.createElement('p');
+        emptyMsg.classList.add('empty-message');
+        emptyMsg.textContent = 'No tasks to do';
+        todoDiv.appendChild(emptyMsg);
+    }
 }
 
 //Generate the to do list task DOM
 
 const generateTaskDOM = (task, index) => {
     //create elemets: div, checkbox, text and button
-    const taskDiv = document.createElement('div');
+    const taskEl = document.createElement('label');
+    taskEl.classList.add('list-item');
+    const containerEl = document.createElement('div');
+    containerEl.classList.add('list-item__container');
     const checkbox = document.createElement('input');
     const newP = document.createElement('span');
     const button = document.createElement('button');
+
 
     //Working with checkbox
     checkbox.setAttribute('type', 'checkbox');
@@ -67,38 +76,46 @@ const generateTaskDOM = (task, index) => {
     newP.textContent = `Task ${index + 1}: ${task.task}`;
 
     //working with button
-    button.textContent = 'x';
+    button.textContent = 'Remove';
+    button.classList.add('button', 'button--text')
     button.addEventListener('click', () => {
         removeTask(task._id);
         saveToDoList(toDo);
         renderTodo(toDo, filters);
     })
 
-    //append elements to the created div
-    taskDiv.appendChild(checkbox);
-    taskDiv.appendChild(newP);
-    taskDiv.appendChild(button);
+    //append elements
+    taskEl.appendChild(containerEl)
+    containerEl.appendChild(checkbox);
+    containerEl.appendChild(newP);
+    taskEl.appendChild(button);
 
-    return taskDiv
+    return taskEl
 }
 
 //Generate the to do list summary DOM
 const generateSummaryDOM = (list) => {
     const summary = document.createElement('p');
-    summary.textContent = `Total number of tasks to do is ${list.length}`
+    summary.classList.add('list-title');
+    const ending = list.length === 1 ? '' : 's'
+
+    summary.textContent = `You have ${list.length} task${ending} to do`
+
     return summary
 }
 
 //Add a task to the to do list
 const addTask = (e) => {
     e.preventDefault();
-    const inpVal = e.target.elements.addTaskInp.value;
-    toDo.push({
-        _id: uuidv4(),
-        task: inpVal,
-        completed: false
-    })
-    saveToDoList(toDo)
-    renderTodo(toDo, filters);
-    e.target.elements.addTaskInp.value = '';
+    const inpVal = e.target.elements.addTaskInp.value.trim();
+    if (inpVal.length > 0) {
+        toDo.push({
+            _id: uuidv4(),
+            task: inpVal,
+            completed: false
+        })
+        saveToDoList(toDo)
+        renderTodo(toDo, filters);
+        e.target.elements.addTaskInp.value = '';
+    }
 }
