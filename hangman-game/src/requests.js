@@ -7,3 +7,5 @@ const getPuzzle = async (wordCount) => {
         throw new Error('Enable to get puzzle')
     }
 }
+
+export {getPuzzle as default}

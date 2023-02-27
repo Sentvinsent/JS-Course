@@ -1,3 +1,6 @@
+import Hangman from './hangman';
+import getPuzzle from './requests';
+
 const gameText = document.getElementById('game-txt');
 const gameResTxt = document.getElementById('game-res-txt')
 let game;
@@ -11,8 +14,10 @@ const render = () => {
         });
         const newWordTxt = newWordArray.join('');
         gameText.innerHTML = `The word to guess is: ${newWordTxt}`;
+        gameResTxt.textContent = game.displayPuzzle.gameResTxt;
+    } else {
+        gameResTxt.textContent = game.displayPuzzle;
     }
-    gameResTxt.textContent = game.displayPuzzle.gameResTxt;
 }
 
 const startGame = async () => {
