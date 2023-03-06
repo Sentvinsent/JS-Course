@@ -1,4 +1,4 @@
-import { createNote } from "./notes";
+import { createNote, loadNotes } from "./notes";
 import { setFilters } from "./filters";
 import { renderNotes } from "./views";
 
@@ -24,6 +24,7 @@ document.getElementById('sort-by').addEventListener('change', (e) => {
 
 window.addEventListener('storage', (e) => {
     if (e.key === 'notes') {
+        loadNotes()
         renderNotes()
     }
 })

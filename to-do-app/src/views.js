@@ -1,38 +1,16 @@
-'use strict'
-
-//Check notes in the local storage
-
-const getToDoList = () => {
-    const toDoJSON = localStorage.getItem('toDoList');
-    try {
-        return toDoJSON ? JSON.parse(toDoJSON) : [];
-    } catch {
-        return []
-    }
-}
-
-//Save to do list in the local storage
-
-const saveToDoList = (list) => {
-    localStorage.setItem('toDoList', JSON.stringify(list));
-}
-
-//remove task from the list
-const removeTask = (id) => {
-    const taskIndex = toDo.findIndex((task) => task._id === id);
-    if (taskIndex > -1) {
-        toDo.splice(taskIndex, 1);
-    }
-}
+import { getTodos, removeTodo, toggleTodo } from "./todos";
+import { getFilters } from "./filters";
 
 //Render the to do list
-const renderTodo = (list, filters) => {
+const renderTodo = () => {
     const todoDiv = document.getElementById('to-do-list');
+    const list = getTodos();
+    const { searchText, hideCompleted } = getFilters();
     const incompleteTasks = list.filter((task) => !task.completed);
 
     let filteredList = list.filter((task) => {
-        const textMatchFilter = task.task.toLocaleLowerCase().includes(filters.searchText.toLocaleLowerCase());
-        const hideCompletedFilter = !filters.hideCompleted || !task.completed;
+        const textMatchFilter = task.task.toLocaleLowerCase().includes(searchText.toLocaleLowerCase());
+        const hideCompletedFilter = !hideCompleted || !task.completed;
         return textMatchFilter && hideCompletedFilter;
     })
 
@@ -40,7 +18,7 @@ const renderTodo = (list, filters) => {
     if (filteredList.length > 0) {
         todoDiv.appendChild(generateSummaryDOM(incompleteTasks));
         filteredList.forEach((task, index) => {
-            todoDiv.appendChild(generateTaskDOM(task, index));
+            todoDiv.appendChild(generateTodoDOM(task, index));
         })
     } else {
         const emptyMsg = document.createElement('p');
@@ -52,7 +30,7 @@ const renderTodo = (list, filters) => {
 
 //Generate the to do list task DOM
 
-const generateTaskDOM = (task, index) => {
+const generateTodoDOM = (task, index) => {
     //create elemets: div, checkbox, text and button
     const taskEl = document.createElement('label');
     taskEl.classList.add('list-item');
@@ -63,13 +41,13 @@ const generateTaskDOM = (task, index) => {
     const button = document.createElement('button');
 
 
+
     //Working with checkbox
     checkbox.setAttribute('type', 'checkbox');
     checkbox.checked = task.completed;
     checkbox.addEventListener('change', (e) => {
-        task.completed = e.target.checked;
-        saveToDoList(toDo);
-        renderTodo(toDo, filters);
+        toggleTodo(task._id)
+        renderTodo();
     })
 
     //working with text
@@ -79,9 +57,8 @@ const generateTaskDOM = (task, index) => {
     button.textContent = 'Remove';
     button.classList.add('button', 'button--text')
     button.addEventListener('click', () => {
-        removeTask(task._id);
-        saveToDoList(toDo);
-        renderTodo(toDo, filters);
+        removeTodo(task._id);
+        renderTodo();
     })
 
     //append elements
@@ -94,9 +71,10 @@ const generateTaskDOM = (task, index) => {
 }
 
 //Generate the to do list summary DOM
-const generateSummaryDOM = (list) => {
+const generateSummaryDOM = () => {
     const summary = document.createElement('p');
     summary.classList.add('list-title');
+    const list = getTodos();
     const ending = list.length === 1 ? '' : 's'
 
     summary.textContent = `You have ${list.length} task${ending} to do`
@@ -104,18 +82,4 @@ const generateSummaryDOM = (list) => {
     return summary
 }
 
-//Add a task to the to do list
-const addTask = (e) => {
-    e.preventDefault();
-    const inpVal = e.target.elements.addTaskInp.value.trim();
-    if (inpVal.length > 0) {
-        toDo.push({
-            _id: uuidv4(),
-            task: inpVal,
-            completed: false
-        })
-        saveToDoList(toDo)
-        renderTodo(toDo, filters);
-        e.target.elements.addTaskInp.value = '';
-    }
-}
+export { generateTodoDOM, generateSummaryDOM, renderTodo }

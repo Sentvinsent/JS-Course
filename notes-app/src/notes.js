@@ -6,14 +6,14 @@ let notes = []
 const loadNotes = () => {
     const notesJSON = localStorage.getItem('notes');
     try {
-        return notesJSON ? JSON.parse(notesJSON) : [];
+        notes = notesJSON ? JSON.parse(notesJSON) : [];
     } catch (e) {
-        return []
+        notes = []
     }
 }
 
 //expose notes array from module
-notes = loadNotes();
+loadNotes();
 const getNotes = () => notes;
 
 const createNote = () => {
@@ -91,11 +91,11 @@ const updateNote = (id, updates) => {
         return
     }
 
-    if (typeof(updates.title) === 'string') {
+    if (typeof (updates.title) === 'string') {
         note.title = updates.title;
         note.updated = new Date().getTime();
     }
-    if (typeof(updates.body) === 'string') {
+    if (typeof (updates.body) === 'string') {
         note.body = updates.body;
         note.updated = new Date().getTime();
     }
@@ -105,4 +105,4 @@ const updateNote = (id, updates) => {
     return note
 }
 
-export { getNotes, createNote, removeNote, sortNotes, updateNote }
+export { getNotes, createNote, removeNote, sortNotes, updateNote, loadNotes }
