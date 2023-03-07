@@ -2,7 +2,7 @@ import Hangman from './hangman';
 import getPuzzle from './requests';
 
 const gameText = document.getElementById('game-txt');
-const gameResTxt = document.getElementById('game-res-txt')
+const gameResTxt = document.getElementById('game-res-txt');
 let game;
 
 const render = () => {
@@ -20,10 +20,10 @@ const render = () => {
     }
 }
 
-const startGame = async () => {
+async function startGame() {
     const puzzle = await getPuzzle('2');
-    game = new Hangman(puzzle)
-    render()
+    game = new Hangman(puzzle);
+    render();
 }
 
 document.getElementById('reset-btn').addEventListener('click', startGame);
@@ -33,7 +33,7 @@ window.addEventListener('keydown', e => {
     if (guess.match(/^[A-Za-z]$/)) {
         game.makeGuess(e.key);
         game.checkStatus();
-        render()
+        render();
     }
 })
 

@@ -1,4 +1,4 @@
-const getPuzzle = async (wordCount) => {
+async function getPuzzle(wordCount) {
     const response = await fetch(`https://puzzle.mead.io/puzzle?wordCount=${wordCount}`);
     if (response.status === 200) {
         const data = await response.json();
@@ -8,4 +8,4 @@ const getPuzzle = async (wordCount) => {
     }
 }
 
-export {getPuzzle as default}
+export { getPuzzle as default }

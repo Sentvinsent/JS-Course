@@ -34,9 +34,9 @@ class Hangman {
     checkStatus() {
         let hasGuessed = this.word.every((letter) => this.guessed.includes(letter) || letter === ' ')
         if (this.attempts < 1) {
-            this.status = 'failed';
+            this.status = 'failed'
         } else if (hasGuessed) {
-            this.status = 'finished';
+            this.status = 'finished'
         }
     }
     get displayPuzzle() {
